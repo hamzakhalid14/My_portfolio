@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +16,7 @@
             --accent-color: #e74c3c;
             --text-color: #333;
             --bg-color: #ecf0f1;
+            --bg-color-dark: #1a1a1a;
         }
 
         body {
@@ -24,6 +25,7 @@
             color: var(--text-color);
             min-height: 100vh;
             padding-top: 80px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .navbar {
@@ -87,11 +89,12 @@
             padding: 50px;
             margin-top: 30px;
             text-align: center;
-            transition: transform 0.3s ease;
+            transition: transform 0.3s ease, background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         .container:hover {
             transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
         }
 
         .profile-pic {
@@ -207,7 +210,7 @@
         }
 
         body.dark-mode {
-            background-color: #1a1a1a;
+            background-color: var(--bg-color-dark);
             color: #f5f5f5;
         }
 
@@ -235,6 +238,16 @@
         body.dark-mode .cv-btn:hover {
             background-color: var(--accent-color);
         }
+
+        .navbar-nav .nav-link.language-toggle,
+        .navbar-nav .nav-link.theme-toggle {
+            cursor: pointer;
+        }
+
+        .navbar-nav .nav-link.language-toggle:hover,
+        .navbar-nav .nav-link.theme-toggle:hover {
+            color: var(--secondary-color);
+        }
     </style>
 </head>
 <body>
@@ -249,25 +262,30 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('home') }}"><i class="fas fa-home"></i> Accueil</a>
+                    <a class="nav-link active" href="{{ route('home') }}"><i class="fas fa-home"></i> <span class="nav-text">Accueil</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('formation') }}"><i class="fas fa-graduation-cap"></i> Formation</a>
+                    <a class="nav-link" href="{{ route('formation') }}"><i class="fas fa-graduation-cap"></i> <span class="nav-text">Formation</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('skills') }}"><i class="fas fa-cogs"></i> Compétences</a>
+                    <a class="nav-link" href="{{ route('skills') }}"><i class="fas fa-cogs"></i> <span class="nav-text">Compétences</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('experience') }}"><i class="fas fa-briefcase"></i> Expériences</a>
+                    <a class="nav-link" href="{{ route('experience') }}"><i class="fas fa-briefcase"></i> <span class="nav-text">Expériences</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('projects') }}"><i class="fas fa-project-diagram"></i> Projets</a>
+                    <a class="nav-link" href="{{ route('projects') }}"><i class="fas fa-project-diagram"></i> <span class="nav-text">Projets</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('contact') }}"><i class="fas fa-envelope"></i> Contact</a>
+                    <a class="nav-link" href="{{ route('contact') }}"><i class="fas fa-envelope"></i> <span class="nav-text">Contact</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="dark-mode-toggle">
+                    <a class="nav-link language-toggle" href="#" id="language-toggle">
+                        <i class="fas fa-language"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link theme-toggle" href="#" id="theme-toggle">
                         <i class="fas fa-moon" id="theme-icon"></i>
                     </a>
                 </li>
@@ -277,37 +295,53 @@
 </nav>
 
 <!-- Contenu principal -->
-<div class="container">
-    <img src="{{ asset('images/profile.jpeg') }}" alt="Photo de Profil" class="profile-pic animate__animated animate__fadeIn">
+<main class="container" role="main">
+    <img src="{{ asset('images/profile.jpeg') }}" alt="Photo de Profil de Khalid Hamza" class="profile-pic animate__animated animate__fadeIn">
     <h1 class="animate__animated animate__fadeInDown">Khalid Hamza</h1>
     <p class="description animate__animated animate__fadeInUp">
-        Développeur Full Stack junior passionné par l'innovation et la création de solutions web performantes. 
+        <span class="fr">Développeur Full Stack junior passionné par l'innovation et la création de solutions web performantes. 
         Avec une solide formation en développement et une curiosité insatiable pour les nouvelles technologies, 
-        je suis prêt à relever des défis stimulants et à apporter ma contribution à des projets ambitieux.
+        je suis prêt à relever des défis stimulants et à apporter ma contribution à des projets ambitieux.</span>
+        <span class="en" style="display: none;">Junior Full Stack Developer passionate about innovation and creating high-performance web solutions. 
+        With a solid background in development and an insatiable curiosity for new technologies, 
+        I am ready to take on challenging projects and contribute to ambitious goals.</span>
     </p>
-    <p class="bienvenue animate__animated animate__fadeIn animate__delay-1s">Bienvenue sur mon portfolio !</p>
+    <p class="bienvenue animate__animated animate__fadeIn animate__delay-1s">
+        <span class="fr">Bienvenue sur mon portfolio !</span>
+        <span class="en" style="display: none;">Welcome to my portfolio!</span>
+    </p>
     <div class="button-container">
-        <a href="{{ route('contact') }}" class="contact-btn animate__animated animate__fadeInUp animate__delay-1s">Contactez-moi</a>
+        <a href="{{ route('contact') }}" class="contact-btn animate__animated animate__fadeInUp animate__delay-1s">
+            <span class="fr">Contactez-moi</span>
+            <span class="en" style="display: none;">Contact me</span>
+        </a>
         <button type="button" class="cv-btn animate__animated animate__fadeInUp animate__delay-1s" data-bs-toggle="modal" data-bs-target="#cvModal">
-            Voir mon CV
+            <span class="fr">Voir mon CV</span>
+            <span class="en" style="display: none;">View my CV</span>
         </button>
     </div>
-</div>
+</main>
 
 <!-- Modal pour le CV -->
 <div class="modal fade" id="cvModal" tabindex="-1" aria-labelledby="cvModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="cvModalLabel">Mon CV</h5>
+        <h5 class="modal-title" id="cvModalLabel">
+            <span class="fr">Mon CV</span>
+            <span class="en" style="display: none;">My CV</span>
+        </h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
         <!-- Inclusion du fichier PDF dans l'iframe -->
-        <iframe src="{{ asset('Files/hamza.khalid_cv.pdf') }}" width="100%" height="500px"></iframe>
+        <iframe src="{{ asset('Files/hamza.khalid_cv.pdf') }}" width="100%" height="500px" title="CV de Khalid Hamza"></iframe>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+            <span class="fr">Fermer</span>
+            <span class="en" style="display: none;">Close</span>
+        </button>
       </div>
     </div>
   </div>
@@ -328,6 +362,7 @@
             var target = $(this.getAttribute('href'));
             if( target.length ) {
                 event.preventDefault();
+                
                 $('html, body').stop().animate({
                     scrollTop: target.offset().top - 100
                 }, 1000);
@@ -354,8 +389,8 @@
             });
         });
 
-        // Dark mode toggle
-        const toggle = document.getElementById('dark-mode-toggle');
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         
         // Check for saved theme preference
@@ -366,8 +401,8 @@
             themeIcon.classList.toggle('fa-sun', savedTheme !== 'dark-mode');
         }
 
-        // Toggle dark mode on icon click
-        toggle.addEventListener('click', function (e) {
+        // Toggle theme on icon click
+        themeToggle.addEventListener('click', function (e) {
             e.preventDefault();
             
             document.body.classList.toggle('dark-mode');
@@ -379,6 +414,42 @@
 
             // Save the preference
             localStorage.setItem('theme', isDarkMode ? 'dark-mode' : '');
+        });
+
+        // Language toggle
+        const languageToggle = document.getElementById('language-toggle');
+        let isEnglish = false;
+
+        languageToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            isEnglish = !isEnglish;
+
+            $('.fr').toggle(!isEnglish);
+            $('.en').toggle(isEnglish);
+
+            // Update navbar text
+            $('.nav-text').each(function() {
+                const $this = $(this);
+                const frText = $this.data('fr') || $this.text();
+                const enText = $this.data('en') || ({
+                    'Accueil': 'Home',
+                    'Formation': 'Education',
+                    'Compétences': 'Skills',
+                    'Expériences': 'Experiences',
+                    'Projets': 'Projects',
+                    'Contact': 'Contact'
+                })[frText];
+
+                if (!$this.data('fr')) {
+                    $this.data('fr', frText);
+                    $this.data('en', enText);
+                }
+
+                $this.text(isEnglish ? enText : frText);
+            });
+
+            // Update html lang attribute
+            $('html').attr('lang', isEnglish ? 'en' : 'fr');
         });
     });
 </script>
