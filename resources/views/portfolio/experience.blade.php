@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +23,7 @@
             font-family: 'Poppins', sans-serif;
             color: var(--text-color);
             min-height: 100vh;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, background-image 0.3s ease;
             background-image: url('/placeholder.svg?height=1080&width=1920');
             background-size: cover;
             background-position: center;
@@ -202,6 +202,16 @@
             color: #e0e0e0;
         }
 
+        .navbar-nav .nav-link.language-toggle,
+        .navbar-nav .nav-link.theme-toggle {
+            cursor: pointer;
+        }
+
+        .navbar-nav .nav-link.language-toggle:hover,
+        .navbar-nav .nav-link.theme-toggle:hover {
+            color: var(--secondary-color);
+        }
+
         @media (max-width: 768px) {
             .container {
                 padding: 30px;
@@ -217,7 +227,7 @@
 </head>
 <body>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg" role="navigation">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('home') }}">Khalid Hamza</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -226,25 +236,30 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}"><i class="fas fa-home"></i> Accueil</a>
+                    <a class="nav-link" href="{{ route('home') }}"><i class="fas fa-home"></i> <span class="nav-text">Accueil</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('formation') }}"><i class="fas fa-graduation-cap"></i> Formation</a>
+                    <a class="nav-link" href="{{ route('formation') }}"><i class="fas fa-graduation-cap"></i> <span class="nav-text">Formation</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('skills') }}"><i class="fas fa-cogs"></i> Compétences</a>
+                    <a class="nav-link" href="{{ route('skills') }}"><i class="fas fa-cogs"></i> <span class="nav-text">Compétences</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('experience') }}"><i class="fas fa-briefcase"></i> Expériences</a>
+                    <a class="nav-link active" href="{{ route('experience') }}" aria-current="page"><i class="fas fa-briefcase"></i> <span class="nav-text">Expériences</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('projects') }}"><i class="fas fa-project-diagram"></i> Projets</a>
+                    <a class="nav-link" href="{{ route('projects') }}"><i class="fas fa-project-diagram"></i> <span class="nav-text">Projets</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('contact') }}"><i class="fas fa-envelope"></i> Contact</a>
+                    <a class="nav-link" href="{{ route('contact') }}"><i class="fas fa-envelope"></i> <span class="nav-text">Contact</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="dark-mode-toggle">
+                    <a class="nav-link language-toggle" href="#" id="language-toggle">
+                        <i class="fas fa-language"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link theme-toggle" href="#" id="theme-toggle">
                         <i class="fas fa-moon" id="theme-icon"></i>
                     </a>
                 </li>
@@ -254,14 +269,20 @@
 </nav>
 
 <!-- Contenu principal -->
-<div class="container">
-    <h1 class="animate__animated animate__fadeInDown">Parcours Professionnel</h1>
+<main class="container" role="main">
+    <h1 class="animate__animated animate__fadeInDown">
+        <span class="fr">Parcours Professionnel</span>
+        <span class="en" style="display: none;">Professional Experience</span>
+    </h1>
     
     <div class="row">
         @foreach($experiences as $experience)
             <div class="col-md-12 animate__animated animate__fadeInUp">
                 <div class="experience-card">
-                    <h3>{{ $experience->role }}</h3>
+                    <h3>
+                        <span class="fr">{{ $experience->role }}</span>
+                        <span class="en" style="display: none;">{{ $experience->role_en }}</span>
+                    </h3>
                     <p class="company">
                         <i class="fas fa-building"></i>
                         {{ $experience->company }}
@@ -270,12 +291,15 @@
                         <i class="fas fa-calendar-alt"></i>
                         {{ $experience->start_date }} - {{ $experience->end_date ?? 'Présent' }}
                     </p>
-                    <p class="description">{{ $experience->description }}</p>
+                    <p class="description">
+                        <span class="fr">{{ $experience->description }}</span>
+                        <span class="en" style="display: none;">{{ $experience->description_en }}</span>
+                    </p>
                 </div>
             </div>
         @endforeach
     </div>
-</div>
+</main>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -333,8 +357,8 @@
             animateElements();
         });
 
-        // Dark mode toggle
-        const toggle = document.getElementById('dark-mode-toggle');
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         
         // Check for saved theme preference
@@ -345,9 +369,10 @@
             themeIcon.classList.toggle('fa-sun', savedTheme !== 'dark-mode');
         }
 
-        // Toggle dark mode on icon click
-        toggle.addEventListener('click', function (e) {
+        // Toggle theme on icon click
+        themeToggle.addEventListener('click', function (e) {
             e.preventDefault();
+            
             document.body.classList.toggle('dark-mode');
             const isDarkMode = document.body.classList.contains('dark-mode');
             
@@ -357,6 +382,42 @@
 
             // Save the preference
             localStorage.setItem('theme', isDarkMode ? 'dark-mode' : '');
+        });
+
+        // Language toggle
+        const languageToggle = document.getElementById('language-toggle');
+        let isEnglish = false;
+
+        languageToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            isEnglish = !isEnglish;
+
+            $('.fr').toggle(!isEnglish);
+            $('.en').toggle(isEnglish);
+
+            // Update navbar text
+            $('.nav-text').each(function() {
+                const $this = $(this);
+                const frText = $this.data('fr') || $this.text();
+                const enText = $this.data('en') || ({
+                    'Accueil': 'Home',
+                    'Formation': 'Education',
+                    'Compétences': 'Skills',
+                    'Expériences': 'Experiences',
+                    'Projets': 'Projects',
+                    'Contact': 'Contact'
+                })[frText];
+
+                if (!$this.data('fr')) {
+                    $this.data('fr', frText);
+                    $this.data('en', enText);
+                }
+
+                $this.text(isEnglish ? enText : frText);
+            });
+
+            // Update html lang attribute
+            $('html').attr('lang', isEnglish ? 'en' : 'fr');
         });
     });
 </script>

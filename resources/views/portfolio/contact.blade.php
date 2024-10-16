@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,7 +23,7 @@
             font-family: 'Poppins', sans-serif;
             color: var(--text-color);
             min-height: 100vh;
-            transition: color 0.3s ease;
+            transition: color 0.3s ease, background-image 0.3s ease;
             background-image: url('/placeholder.svg?height=1080&width=1920');
             background-size: cover;
             background-position: center;
@@ -229,11 +229,21 @@
         body.dark-mode .form-label {
             color: #f5f5f5;
         }
+
+        .navbar-nav .nav-link.language-toggle,
+        .navbar-nav .nav-link.theme-toggle {
+            cursor: pointer;
+        }
+
+        .navbar-nav .nav-link.language-toggle:hover,
+        .navbar-nav .nav-link.theme-toggle:hover {
+            color: var(--secondary-color);
+        }
     </style>
 </head>
 <body>
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg" role="navigation">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('home') }}">Khalid Hamza</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -242,25 +252,30 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}"><i class="fas fa-home"></i> Accueil</a>
+                    <a class="nav-link" href="{{ route('home') }}"><i class="fas fa-home"></i> <span class="nav-text">Accueil</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('formation') }}"><i class="fas fa-graduation-cap"></i> Formation</a>
+                    <a class="nav-link" href="{{ route('formation') }}"><i class="fas fa-graduation-cap"></i> <span class="nav-text">Formation</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('skills') }}"><i class="fas fa-cogs"></i> Compétences</a>
+                    <a class="nav-link" href="{{ route('skills') }}"><i class="fas fa-cogs"></i> <span class="nav-text">Compétences</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('experience') }}"><i class="fas fa-briefcase"></i> Expériences</a>
+                    <a class="nav-link" href="{{ route('experience') }}"><i class="fas fa-briefcase"></i> <span class="nav-text">Expériences</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('projects') }}"><i class="fas fa-project-diagram"></i> Projets</a>
+                    <a class="nav-link" href="{{ route('projects') }}"><i class="fas fa-project-diagram"></i> <span class="nav-text">Projets</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('contact') }}"><i class="fas fa-envelope"></i> Contact</a>
+                    <a class="nav-link active" href="{{ route('contact') }}" aria-current="page"><i class="fas fa-envelope"></i> <span class="nav-text">Contact</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="dark-mode-toggle">
+                    <a class="nav-link language-toggle" href="#" id="language-toggle">
+                        <i class="fas fa-language"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link theme-toggle" href="#" id="theme-toggle">
                         <i class="fas fa-moon" id="theme-icon"></i>
                     </a>
                 </li>
@@ -270,17 +285,26 @@
 </nav>
 
 <!-- Contenu principal -->
-<div class="container">
-    <h1 class="animate__animated animate__fadeInDown">Contactez-moi</h1>
+<main class="container" role="main">
+    <h1 class="animate__animated animate__fadeInDown">
+        <span class="fr">Contactez-moi</span>
+        <span class="en" style="display: none;">Contact Me</span>
+    </h1>
     
     <!-- Formulaire de contact -->
     <div class="row justify-content-center mb-5">
         <div class="col-md-8 animate__animated animate__fadeInUp">
-            <h2 class="mb-4">Formulaire de Contact</h2>
+            <h2 class="mb-4">
+                <span class="fr">Formulaire de Contact</span>
+                <span class="en" style="display: none;">Contact Form</span>
+            </h2>
             <form action="{{ route('contact.submit') }}" method="POST">
                 @csrf
                 <div class="mb-3">
-                    <label for="name" class="form-label">Nom</label>
+                    <label for="name" class="form-label">
+                        <span class="fr">Nom</span>
+                        <span class="en" style="display: none;">Name</span>
+                    </label>
                     <input type="text" class="form-control" id="name" name="name" required>
                 </div>
                 <div class="mb-3">
@@ -288,11 +312,17 @@
                     <input type="email" class="form-control" id="email" name="email" required>
                 </div>
                 <div class="mb-3">
-                    <label for="telephone" class="form-label">Téléphone</label>
+                    <label for="telephone" class="form-label">
+                        <span class="fr">Téléphone</span>
+                        <span class="en" style="display: none;">Phone</span>
+                    </label>
                     <input type="tel" class="form-control" id="telephone" name="telephone">
                 </div>
                 <div class="mb-3">
-                    <label for="subject" class="form-label">Sujet</label>
+                    <label for="subject" class="form-label">
+                        <span class="fr">Sujet</span>
+                        <span class="en" style="display: none;">Subject</span>
+                    </label>
                     <input type="text" class="form-control" id="subject" name="subject" required>
                 </div>
                 <div class="mb-3">
@@ -300,19 +330,25 @@
                     <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
                 </div>
                 <div class="text-center">
-                    <button type="submit" class="btn btn-primary">Envoyer</button>
+                    <button type="submit" class="btn btn-primary">
+                        <span class="fr">Envoyer</span>
+                        <span class="en" style="display: none;">Send</span>
+                    </button>
                 </div>
             </form>
         </div>
     </div>
 
     <!-- Coordonnées -->
-    <h2 class="mb-4">Mes Coordonnées</h2>
+    <h2 class="mb-4">
+        <span class="fr">Mes Coordonnées</span>
+        <span class="en" style="display: none;">My Contact  Information</span>
+    </h2>
     <div class="row justify-content-center animate__animated animate__fadeInUp">
         @if(!empty($contact->github))
         <div class="col-md-4 col-sm-6 mb-4">
-            <a href="https://github.com/{{ $contact->github }}" target="_blank" class="contact-card text-center">
-                <i class="fab fa-github mb-3"></i>
+            <a href="https://github.com/{{ $contact->github }}" target="_blank" rel="noopener noreferrer" class="contact-card text-center">
+                <i class="fab fa-github mb-3" aria-hidden="true"></i>
                 <h3 class="h5">GitHub</h3>
                 <p>{{ $contact->github }}</p>
             </a>
@@ -320,8 +356,8 @@
         @endif
         @if(!empty($contact->linkedin))
         <div class="col-md-4 col-sm-6 mb-4">
-            <a href="https://www.linkedin.com/in/{{ $contact->linkedin }}" target="_blank" class="contact-card text-center">
-                <i class="fab fa-linkedin mb-3"></i>
+            <a href="https://www.linkedin.com/in/{{ $contact->linkedin }}" target="_blank" rel="noopener noreferrer" class="contact-card text-center">
+                <i class="fab fa-linkedin mb-3" aria-hidden="true"></i>
                 <h3 class="h5">LinkedIn</h3>
                 <p>{{ $contact->linkedin }}</p>
             </a>
@@ -330,8 +366,11 @@
         @if(!empty($contact->telephone))
         <div class="col-md-4 col-sm-6 mb-4">
             <a href="tel:{{ $contact->telephone }}" class="contact-card text-center">
-                <i class="fas fa-phone mb-3"></i>
-                <h3 class="h5">Téléphone</h3>
+                <i class="fas fa-phone mb-3" aria-hidden="true"></i>
+                <h3 class="h5">
+                    <span class="fr">Téléphone</span>
+                    <span class="en" style="display: none;">Phone</span>
+                </h3>
                 <p>{{ $contact->telephone }}</p>
             </a>
         </div>
@@ -339,7 +378,7 @@
         @if(!empty($contact->email))
         <div class="col-md-4 col-sm-6 mb-4">
             <a href="mailto:{{ $contact->email }}" class="contact-card text-center">
-                <i class="fas fa-envelope mb-3"></i>
+                <i class="fas fa-envelope mb-3" aria-hidden="true"></i>
                 <h3 class="h5">Email</h3>
                 <p>{{ $contact->email }}</p>
             </a>
@@ -347,8 +386,8 @@
         @endif
         @if(!empty($contact->facebook))
         <div class="col-md-4 col-sm-6 mb-4">
-            <a  href="https://www.facebook.com/{{ $contact->facebook }}" target="_blank" class="contact-card text-center">
-                <i class="fab fa-facebook mb-3"></i>
+            <a href="https://www.facebook.com/{{ $contact->facebook }}" target="_blank" rel="noopener noreferrer" class="contact-card text-center">
+                <i class="fab fa-facebook mb-3" aria-hidden="true"></i>
                 <h3 class="h5">Facebook</h3>
                 <p>{{ $contact->facebook }}</p>
             </a>
@@ -356,15 +395,15 @@
         @endif
         @if(!empty($contact->instagram))
         <div class="col-md-4 col-sm-6 mb-4">
-            <a  href="https://www.instagram.com/{{ $contact->instagram }}" target="_blank" class="contact-card text-center">
-                <i class="fab fa-instagram mb-3"></i>
+            <a href="https://www.instagram.com/{{ $contact->instagram }}" target="_blank" rel="noopener noreferrer" class="contact-card text-center">
+                <i class="fab fa-instagram mb-3" aria-hidden="true"></i>
                 <h3 class="h5">Instagram</h3>
                 <p>{{ $contact->instagram }}</p>
             </a>
         </div>
         @endif
     </div>
-</div>
+</main>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -422,8 +461,8 @@
             animateElements();
         });
 
-        // Dark mode toggle
-        const toggle = document.getElementById('dark-mode-toggle');
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         
         // Check for saved theme preference
@@ -434,8 +473,8 @@
             themeIcon.classList.toggle('fa-sun', savedTheme !== 'dark-mode');
         }
 
-        // Toggle dark mode on icon click
-        toggle.addEventListener('click', function (e) {
+        // Toggle theme on icon click
+        themeToggle.addEventListener('click', function (e) {
             e.preventDefault();
             document.body.classList.toggle('dark-mode');
             const isDarkMode = document.body.classList.contains('dark-mode');
@@ -447,22 +486,42 @@
             // Save the preference
             localStorage.setItem('theme', isDarkMode ? 'dark-mode' : '');
         });
-    });
-</script>
-<script>
-    $(document).ready(function() {
-        // ... other script content ...
 
-        // Navbar color change on scroll
-        $(window).scroll(function() {
-            if ($(window).scrollTop() > 50) {
-                $('.navbar').addClass('scrolled');
-            } else {
-                $('.navbar').removeClass('scrolled');
-            }
+        // Language toggle
+        const languageToggle = document.getElementById('language-toggle');
+        let isEnglish = false;
+
+        languageToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            isEnglish = !isEnglish;
+
+            $('.fr').toggle(!isEnglish);
+            $('.en').toggle(isEnglish);
+
+            // Update navbar text
+            $('.nav-text').each(function() {
+                const $this = $(this);
+                const frText = $this.data('fr') || $this.text();
+                const enText = $this.data('en') || ({
+                    'Accueil': 'Home',
+                    'Formation': 'Education',
+                    'Compétences': 'Skills',
+                    'Expériences': 'Experiences',
+                    'Projets': 'Projects',
+                    'Contact': 'Contact'
+                })[frText];
+
+                if (!$this.data('fr')) {
+                    $this.data('fr', frText);
+                    $this.data('en', enText);
+                }
+
+                $this.text(isEnglish ? enText : frText);
+            });
+
+            // Update html lang attribute
+            $('html').attr('lang', isEnglish ? 'en' : 'fr');
         });
-
-        // ... rest of the script content ...
     });
 </script>
 

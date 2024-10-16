@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +16,7 @@
             --accent-color: #e74c3c;
             --text-color: #333;
             --bg-color: #ecf0f1;
+            --bg-color-dark: #1a1a1a;
         }
 
         body {
@@ -23,6 +24,7 @@
             background-color: var(--bg-color);
             color: var(--text-color);
             padding-top: 80px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .navbar {
@@ -85,6 +87,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 50px;
             margin-top: 30px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         h1 {
@@ -174,7 +177,7 @@
         }
 
         body.dark-mode {
-            background-color: #1a1a1a;
+            background-color: var(--bg-color-dark);
             color: #f5f5f5;
         }
 
@@ -200,12 +203,22 @@
         body.dark-mode .skill-level {
             background-color: #4a4a4a;
         }
+
+        .navbar-nav .nav-link.language-toggle,
+        .navbar-nav .nav-link.theme-toggle {
+            cursor: pointer;
+        }
+
+        .navbar-nav .nav-link.language-toggle:hover,
+        .navbar-nav .nav-link.theme-toggle:hover {
+            color: var(--secondary-color);
+        }
     </style>
 </head>
 <body>
 
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg">
+<nav class="navbar navbar-expand-lg" role="navigation">
     <div class="container-fluid">
         <a class="navbar-brand" href="{{ route('home') }}">Khalid Hamza</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -214,25 +227,30 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}"><i class="fas fa-home"></i> Accueil</a>
+                    <a class="nav-link" href="{{ route('home') }}"><i class="fas fa-home"></i> <span class="nav-text">Accueil</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('formation') }}"><i class="fas fa-graduation-cap"></i> Formation</a>
+                    <a class="nav-link" href="{{ route('formation') }}"><i class="fas fa-graduation-cap"></i> <span class="nav-text">Formation</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('skills') }}"><i class="fas fa-cogs"></i> Compétences</a>
+                    <a class="nav-link active" href="{{ route('skills') }}" aria-current="page"><i class="fas fa-cogs"></i> <span class="nav-text">Compétences</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('experience') }}"><i class="fas fa-briefcase"></i> Expériences</a>
+                    <a class="nav-link" href="{{ route('experience') }}"><i class="fas fa-briefcase"></i> <span class="nav-text">Expériences</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('projects') }}"><i class="fas fa-project-diagram"></i> Projets</a>
+                    <a class="nav-link" href="{{ route('projects') }}"><i class="fas fa-project-diagram"></i> <span class="nav-text">Projets</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('contact') }}"><i class="fas fa-envelope"></i> Contact</a>
+                    <a class="nav-link" href="{{ route('contact') }}"><i class="fas fa-envelope"></i> <span class="nav-text">Contact</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="dark-mode-toggle">
+                    <a class="nav-link language-toggle" href="#" id="language-toggle">
+                        <i class="fas fa-language"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link theme-toggle" href="#" id="theme-toggle">
                         <i class="fas fa-moon" id="theme-icon"></i>
                     </a>
                 </li>
@@ -242,12 +260,18 @@
 </nav>
 
 <!-- Contenu des compétences -->
-<div class="container">
-    <h1 class="animate__animated animate__fadeInDown">Mes Compétences</h1>
+<main class="container" role="main">
+    <h1 class="animate__animated animate__fadeInDown">
+        <span class="fr">Mes Compétences</span>
+        <span class="en" style="display: none;">My Skills</span>
+    </h1>
 
     <!-- Compétences groupées par type -->
     @foreach($skills->groupBy('type') as $type => $skillsGroup)
-        <h2 class="animate__animated animate__fadeInUp">{{ $type }}</h2>
+        <h2 class="animate__animated animate__fadeInUp">
+            <span class="fr">{{ $type }}</span>
+            <span class="en" style="display: none;">{{ $type === 'Langages de programmation' ? 'Programming Languages' : ($type === 'Frameworks' ? 'Frameworks' : ($type === 'Outils' ? 'Tools' : $type)) }}</span>
+        </h2>
         <div class="row g-4">
             @foreach($skillsGroup as $skill)
                 <div class="col-md-4 col-sm-6 animate__animated animate__fadeInUp">
@@ -255,17 +279,21 @@
                         <img src="{{ $skill->image_url }}" alt="{{ $skill->name }}" class="skill-image">
                         <div class="skill-content">
                             <h3 class="skill-name">{{ $skill->name }}</h3>
-                            <div class="skill-level">
+                            <div class="skill-level" role="progressbar" aria-valuenow="{{ $skill->level }}" aria-valuemin="0" aria-valuemax="100">
                                 <div class="skill-level-bar" style="width: 0%;"></div>
                             </div>
-                            <p class="mt-2 text-muted">Niveau: <span class="skill-level-text">0</span>/100</p>
+                            <p class="mt-2 text-muted">
+                                <span class="fr">Niveau: </span>
+                                <span class="en" style="display: none;">Level: </span>
+                                <span class="skill-level-text">0</span>/100
+                            </p>
                         </div>
                     </div>
                 </div>
             @endforeach
         </div>
     @endforeach
-</div>
+</main>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -307,7 +335,7 @@
                 
                 if (elementBottom > viewportTop && elementTop < viewportBottom) {
                     var skillBar = $(this).find('.skill-level-bar');
-                    var skillLevel = parseInt(skillBar.parent().next().find('.skill-level-text').text());
+                    var skillLevel = parseInt(skillBar.parent().attr('aria-valuenow'));
                     skillBar.css('width', skillLevel + '%');
                     
                     var counter = 0;
@@ -316,7 +344,7 @@
                             clearInterval(interval);
                         } else {
                             counter++;
-                            skillBar.parent().next().find('.skill-level-text').text(counter);
+                            skillBar.parent().parent().find('.skill-level-text').text(counter);
                         }
                     }, 20);
                 }
@@ -331,8 +359,8 @@
             animateSkillBars();
         });
 
-        // Dark mode toggle
-        const toggle = document.getElementById('dark-mode-toggle');
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         
         // Check for saved theme preference
@@ -343,8 +371,10 @@
             themeIcon.classList.toggle('fa-sun', savedTheme !== 'dark-mode');
         }
 
-        // Toggle dark mode on icon click
-        toggle.addEventListener('click', function (e) {
+        
+
+        // Toggle theme on icon click
+        themeToggle.addEventListener('click', function (e) {
             e.preventDefault();
             document.body.classList.toggle('dark-mode');
             const isDarkMode = document.body.classList.contains('dark-mode');
@@ -355,6 +385,42 @@
 
             // Save the preference
             localStorage.setItem('theme', isDarkMode ? 'dark-mode' : '');
+        });
+
+        // Language toggle
+        const languageToggle = document.getElementById('language-toggle');
+        let isEnglish = false;
+
+        languageToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            isEnglish = !isEnglish;
+
+            $('.fr').toggle(!isEnglish);
+            $('.en').toggle(isEnglish);
+
+            // Update navbar text
+            $('.nav-text').each(function() {
+                const $this = $(this);
+                const frText = $this.data('fr') || $this.text();
+                const enText = $this.data('en') || ({
+                    'Accueil': 'Home',
+                    'Formation': 'Education',
+                    'Compétences': 'Skills',
+                    'Expériences': 'Experiences',
+                    'Projets': 'Projects',
+                    'Contact': 'Contact'
+                })[frText];
+
+                if (!$this.data('fr')) {
+                    $this.data('fr', frText);
+                    $this.data('en', enText);
+                }
+
+                $this.text(isEnglish ? enText : frText);
+            });
+
+            // Update html lang attribute
+            $('html').attr('lang', isEnglish ? 'en' : 'fr');
         });
     });
 </script>

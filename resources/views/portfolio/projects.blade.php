@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -16,6 +16,7 @@
             --accent-color: #e74c3c;
             --text-color: #333;
             --bg-color: #ecf0f1;
+            --bg-color-dark: #1a1a1a;
         }
 
         body {
@@ -24,6 +25,7 @@
             color: var(--text-color);
             min-height: 100vh;
             padding-top: 80px;
+            transition: background-color 0.3s ease, color 0.3s ease;
         }
 
         .navbar {
@@ -86,6 +88,7 @@
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             padding: 50px;
             margin-top: 30px;
+            transition: background-color 0.3s ease, box-shadow 0.3s ease;
         }
 
         h1 {
@@ -197,7 +200,7 @@
         }
 
         body.dark-mode {
-            background-color: #1a1a1a;
+            background-color: var(--bg-color-dark);
             color: #f5f5f5;
         }
 
@@ -235,6 +238,16 @@
         body.dark-mode .btn-github:hover {
             background-color: var(--accent-color);
         }
+
+        .navbar-nav .nav-link.language-toggle,
+        .navbar-nav .nav-link.theme-toggle {
+            cursor: pointer;
+        }
+
+        .navbar-nav .nav-link.language-toggle:hover,
+        .navbar-nav .nav-link.theme-toggle:hover {
+            color: var(--secondary-color);
+        }
     </style>
 </head>
 <body>
@@ -249,25 +262,30 @@
         <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('home') }}"><i class="fas fa-home"></i> Accueil</a>
+                    <a class="nav-link" href="{{ route('home') }}"><i class="fas fa-home"></i> <span class="nav-text">Accueil</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('formation') }}"><i class="fas fa-graduation-cap"></i> Formation</a>
+                    <a class="nav-link" href="{{ route('formation') }}"><i class="fas fa-graduation-cap"></i> <span class="nav-text">Formation</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('skills') }}"><i class="fas fa-cogs"></i> Compétences</a>
+                    <a class="nav-link" href="{{ route('skills') }}"><i class="fas fa-cogs"></i> <span class="nav-text">Compétences</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('experience') }}"><i class="fas fa-briefcase"></i> Expériences</a>
+                    <a class="nav-link" href="{{ route('experience') }}"><i class="fas fa-briefcase"></i> <span class="nav-text">Expériences</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link active" href="{{ route('projects') }}"><i class="fas fa-project-diagram"></i> Projets</a>
+                    <a class="nav-link active" href="{{ route('projects') }}"><i class="fas fa-project-diagram"></i> <span class="nav-text">Projets</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="{{ route('contact') }}"><i class="fas fa-envelope"></i> Contact</a>
+                    <a class="nav-link" href="{{ route('contact') }}"><i class="fas fa-envelope"></i> <span class="nav-text">Contact</span></a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="#" id="dark-mode-toggle">
+                    <a class="nav-link language-toggle" href="#" id="language-toggle">
+                        <i class="fas fa-language"></i>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link theme-toggle" href="#" id="theme-toggle">
                         <i class="fas fa-moon" id="theme-icon"></i>
                     </a>
                 </li>
@@ -277,27 +295,35 @@
 </nav>
 
 <!-- Projects Section -->
-<div class="container">
-    <h1 class="animate__animated animate__fadeInDown">Mes Projets GitHub</h1>
+<main class="container" role="main">
+    <h1 class="animate__animated animate__fadeInDown">
+        <span class="fr">Mes Projets GitHub</span>
+        <span class="en" style="display: none;">My GitHub Projects</span>
+    </h1>
     <div class="row">
         @foreach($projects as $project)
         <div class="col-md-6 mb-4">
             <div class="project-card animate__animated animate__fadeInUp">
                 <h3>{{ $project['name'] }}</h3>
-                <p>{{ $project['description'] ?? 'Aucune description disponible.' }}</p>
+                <p>
+                    <span class="fr">{{ $project['description'] ?? 'Aucune description disponible.' }}</span>
+                    <span class="en" style="display: none;">{{ $project['description'] ?? 'No description available.' }}</span>
+                </p>
                 <div class="project-meta">
                     <span><i class="fas fa-code-branch"></i> {{ $project['language'] ?? 'Non spécifié' }}</span>
                     <span><i class="fas fa-star"></i> {{ $project['stargazers_count'] }}</span>
                     <span><i class="fas fa-code-fork"></i> {{ $project['forks_count'] }}</span>
                 </div>
-                <a href="{{ $project['html_url'] }}" target="_blank" class="btn btn-github">
-                    <i class="fab fa-github"></i> Voir sur GitHub
+                <a href="{{ $project['html_url'] }}" target="_blank" rel="noopener noreferrer" class="btn btn-github">
+                    <i class="fab fa-github"></i> 
+                    <span class="fr">Voir sur GitHub</span>
+                    <span class="en" style="display: none;">View on GitHub</span>
                 </a>
             </div>
         </div>
         @endforeach
     </div>
-</div>
+</main>
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
@@ -340,8 +366,8 @@
             });
         });
 
-        // Dark mode toggle
-        const toggle = document.getElementById('dark-mode-toggle');
+        // Theme toggle
+        const themeToggle = document.getElementById('theme-toggle');
         const themeIcon = document.getElementById('theme-icon');
         
         // Check for saved theme preference
@@ -352,8 +378,8 @@
             themeIcon.classList.toggle('fa-sun', savedTheme !== 'dark-mode');
         }
 
-        // Toggle dark mode on icon click
-        toggle.addEventListener('click', function (e) {
+        // Toggle theme on icon click
+        themeToggle.addEventListener('click', function (e) {
             e.preventDefault();
             document.body.classList.toggle('dark-mode');
             const isDarkMode = document.body.classList.contains('dark-mode');
@@ -364,6 +390,42 @@
 
             // Save the preference
             localStorage.setItem('theme', isDarkMode ? 'dark-mode' : '');
+        });
+
+        // Language toggle
+        const languageToggle = document.getElementById('language-toggle');
+        let isEnglish = false;
+
+        languageToggle.addEventListener('click', function (e) {
+            e.preventDefault();
+            isEnglish = !isEnglish;
+
+            $('.fr').toggle(!isEnglish);
+            $('.en').toggle(isEnglish);
+
+            // Update navbar text
+            $('.nav-text').each(function() {
+                const $this = $(this);
+                const frText = $this.data('fr') || $this.text();
+                const enText = $this.data('en') || ({
+                    'Accueil': 'Home',
+                    'Formation': 'Education',
+                    'Compétences': 'Skills',
+                    'Expériences': 'Experiences',
+                    'Projets': 'Projects',
+                    'Contact': 'Contact'
+                })[frText];
+
+                if (!$this.data('fr')) {
+                    $this.data('fr', frText);
+                    $this.data('en', enText);
+                }
+
+                $this.text(isEnglish ? enText : frText);
+            });
+
+            // Update html lang attribute
+            $('html').attr('lang', isEnglish ? 'en' : 'fr');
         });
     });
 </script>
